@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         modelHorizontalGrids.add(new ModelHorizontalGrid("Kucing Pilek",R.drawable.kucinggrid4));
         modelHorizontalGrids.add(new ModelHorizontalGrid("Kucing Batuk",R.drawable.kucinggrid4));
         modelHorizontalGrids.add(new ModelHorizontalGrid("Kucing Dugem",R.drawable.kucinggrid5));
+        modelHorizontalGrids.add(new ModelHorizontalGrid("Kucing Dugem",R.drawable.kucinggrid5));
 
 
 

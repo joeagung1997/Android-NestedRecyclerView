@@ -1,13 +1,19 @@
 package com.example.macbook.nestedrecyclerview.adapter;
 
 import android.content.Context;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.SkeletonScreen;
 import com.example.macbook.nestedrecyclerview.R;
 import com.example.macbook.nestedrecyclerview.model.ModelHorizontal;
 import com.example.macbook.nestedrecyclerview.model.ModelHorizontalGrid;
@@ -43,7 +49,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         switch (viewType) {
             case GRID_HORIZONTAL:
-                view = inflater.inflate(R.layout.recycler_horizontal_grid, parent, false);
+                view = inflater.inflate(R.layout.viewpager_grid, parent, false);
                 holder = new GridHorizontalViewHolder(view);
                 break;
             case HORIZONTAL:
@@ -78,9 +84,12 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private void gridHorizontalView(GridHorizontalViewHolder holder) {
 
-        RecyclerHorizontalGridAdapter gridHorizontalViewAdapter = new RecyclerHorizontalGridAdapter(getGridViewData());
-        holder.recyclerViewGridHorizontal.setLayoutManager(new GridLayoutManager(context, 2, LinearLayoutManager.HORIZONTAL, false));
-        holder.recyclerViewGridHorizontal.setAdapter(gridHorizontalViewAdapter);
+        /*ini buat menampilkan ViewPagernya */
+        PagerGridAdapter pagerGridAdapter = new PagerGridAdapter(context,getGridViewData());
+        holder.pager.setAdapter(pagerGridAdapter);
+
+        /*ini buat menampilkan DotIndicatornya */
+        holder.tabLayout.setupWithViewPager(holder.pager,true);
     }
 
     private void horizontalView(HorizontalViewHolder holder) {
@@ -88,6 +97,31 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         RecyclerHorizontalAdapter horizontalViewAdapter = new RecyclerHorizontalAdapter(getMovieData());
         holder.recyclerViewHorizontal.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         holder.recyclerViewHorizontal.setAdapter(horizontalViewAdapter);
+
+        /* Ini fungsi Snap Helpernya */
+        SnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(holder.recyclerViewHorizontal);
+
+        /* Ini buat menampilkan SkeletonScreenya  */
+        final SkeletonScreen skeletonScreen = Skeleton.bind(holder.recyclerViewHorizontal)
+                .adapter(horizontalViewAdapter)
+                .shimmer(false)
+                .angle(20)
+                .frozen(false)
+                .duration(1200)
+                .count(20)
+                .load(R.layout.item_skeleton_horizontal)
+                .show(); //default count is 10
+
+        holder.recyclerViewHorizontal.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                skeletonScreen.hide();
+            }
+        }, 3000);
+        return;
+
+
     }
 
     private void verticalView(VerticalViewHolder holder) {
@@ -118,10 +152,14 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public class GridHorizontalViewHolder extends RecyclerView.ViewHolder {
         RecyclerView recyclerViewGridHorizontal;
+        ViewPager pager;
+        TabLayout tabLayout;
 
         public GridHorizontalViewHolder(View itemView) {
             super(itemView);
-            recyclerViewGridHorizontal = (RecyclerView) itemView.findViewById(R.id.recycler_view_horizontal_grid);
+            pager = (ViewPager)itemView.findViewById(R.id.pager_grid);
+            tabLayout = (TabLayout)itemView.findViewById(R.id.tabDots);
+            recyclerViewGridHorizontal = (RecyclerView) itemView.findViewById(R.id.rvHorizontalGrid);
         }
     }
 

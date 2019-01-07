@@ -5,12 +5,23 @@
     android:orientation="horizontal">
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view_horizontal_grid"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-    </android.support.v7.widget.RecyclerView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvHorizontalGrid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+
+        </android.support.v7.widget.RecyclerView>
+
+
+    </LinearLayout>
+
 
 </LinearLayout>
